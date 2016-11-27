@@ -205,14 +205,26 @@
                 top: -2px;
                 left: -2px;
             }
+            .article-action-mid {
+                position: fixed;
+                z-index: 10002;
+                width: 100%;
+                height: 40%;
+                top: 30%;
+            }
 		</style>
 	</head>
 	<body>
 		<div id="root" class="container">
-            <div id="top-nav" class="top-nav">
+            <div id="top-nav" class="top-nav" style="display:none">
                 <div class="icon-back"></div>
                 <div class="nav-title">返回书架</div>
             </div>
+
+            <div class="m-article-action">
+                <div class="article-action-mid" id="action-mid"></div>
+            </div>
+
 			<div id="fiction_chapter_title"></div>
             <div id="fiction_container" class="m-read-content">
                 <h4>第一章 雪中字</h4>
@@ -269,8 +281,8 @@
                     <li id="next_button">下一章</li>
                 </ul>
             </div>
-            <div class="nav-panel-bg" style="display:none"></div>
-            <div class="nav-panel" id="font-container" style="display:none">
+            <div class="nav-panel-bg font_container" style="display:none"></div>
+            <div class="nav-panel font_container" id="font-container" style="display:none">
                 <div class="child-mod">
                     <span>字号</span>
                     <button id="large-font" class="font-size-button">大</button>
@@ -283,7 +295,7 @@
                     </div>
                 </div>
             </div>
-            <div id="bottom-nav" class="bottom-nav">
+            <div id="bottom-nav" class="bottom-nav bottom_nav" style="display:none">
                 <div class="item menu-button" id="menu_button">
                     <div class="item-warp">
                         <div class="icon-catalog"></div>
@@ -334,8 +346,18 @@
                     }
                 }) ();
 
+                var Dom = {
+                    top_nav: $('#top-nav'),
+                    bottom_nav: $('.bottom_nav'),
+                    font_container: $('.font_container'),
+                    font_button: $('#font_button')
+                };
+                var Win = $(window);
+                var Doc = $(document);
+                
                 function main() {
-                    //tudo 整个项目的入口函数
+                    // 整个项目的入口函数
+                    EventHandler();
                 }
                 
                 function ReaderModel() {
@@ -343,11 +365,40 @@
                 }
 
                 function ReaderBaseFrame() {
-                    //tueo 渲染基本的UI结构
+                    //tudo 渲染基本的UI结构
                 }
 
                 function EventHandler() {
-                    //tudo 交互的事件绑定
+                    $('#action-mid').click(function () {
+                        if (Dom.top_nav.css('display') == 'none') {
+                            Dom.top_nav.show();
+                            Dom.bottom_nav.show();
+                        } else {
+                            Dom.top_nav.hide();
+                            Dom.bottom_nav.hide();
+                        }
+                    });
+
+                    Dom.font_button.click(function () {
+                        if (Dom.font_container.css('display') == 'none') {
+                            Dom.font_container.show();
+                            Dom.font_button.addClass('current');
+                        } else {
+                            Dom.font_container.hide();
+                            Dom.font_button.removeClass('current');
+                        }
+                    });
+
+                    $('#night-button').click(function () {
+                        //TUDO 触发背景切换的时间
+                    });
+                    
+                    Win.scroll(function () {
+                        Dom.top_nav.hide();
+                        Dom.bottom_nav.hide();
+                        Dom.font_container.hide();
+                        Dom.font_button.removeClass('current');
+                    });
                 }
 
                 main();
